@@ -668,6 +668,7 @@
 .cell-viewer {
   position: absolute;
   inset: 0;
+  transition: filter 260ms ease;
 }
 
 .cell-viewer > div:not(.cell-fallback) {
@@ -686,6 +687,26 @@
 
 .cell-viewer.is-isolated {
   filter: saturate(1.06) contrast(1.03);
+}
+
+.cell-viewer.microscope-light {
+  filter: none;
+}
+
+.cell-viewer.microscope-purple {
+  filter: sepia(0.85) hue-rotate(220deg) saturate(2.2) brightness(0.94);
+}
+
+.cell-viewer.microscope-mono {
+  filter: grayscale(1) contrast(1.06) brightness(0.98);
+}
+
+.cell-viewer.is-isolated.microscope-purple {
+  filter: sepia(0.85) hue-rotate(220deg) saturate(2.4) brightness(0.94) contrast(1.03);
+}
+
+.cell-viewer.is-isolated.microscope-mono {
+  filter: grayscale(1) contrast(1.09) brightness(0.98);
 }
 
 .stage-label {
@@ -1554,7 +1575,7 @@
   grid-column: 2;
   grid-row: 2;
   display: grid;
-  grid-template-columns: 1fr 0.72fr;
+  grid-template-columns: 1fr;
   gap: 10px;
   min-width: 0;
 }

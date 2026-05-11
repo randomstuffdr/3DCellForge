@@ -1613,7 +1613,8 @@ function ViewerControls({ crossSection, setCrossSection, viewMode, setViewMode }
   )
 }
 
-function CenterStage({ selectedCell, selectedOrganelle, setSelectedOrganelle, crossSection, setCrossSection, labelVisible, renderQuality, customCells, onNotify, onExport, onExporterReady, onRetryGeneration }) {
+function CenterStage({ selectedCell, selectedOrganelle, setSelectedOrganelle, crossSection, setCrossSection, labelVisible, renderQuality, customCells, selectedMicroscope, onNotify, onExport, onExporterReady, onRetryGeneration }) {
+  const microscopeTone = MICROSCOPE_IMAGES.find((item) => item.label === selectedMicroscope)?.tone ?? 'light'
   const [viewMode, setViewMode] = useState('layers')
   const [autoRotate, setAutoRotate] = useState(false)
   const [isIsolated, setIsIsolated] = useState(false)
@@ -1689,7 +1690,7 @@ function CenterStage({ selectedCell, selectedOrganelle, setSelectedOrganelle, cr
         </div>
       </div>
       <ViewerControls crossSection={crossSection} setCrossSection={setCrossSection} viewMode={viewMode} setViewMode={setViewMode} />
-      <div className={`cell-viewer ${viewMode} ${isIsolated ? 'is-isolated' : ''}`}>
+      <div className={`cell-viewer ${viewMode} ${isIsolated ? 'is-isolated' : ''} microscope-${microscopeTone}`}>
         <CellFallback selectedCell={selectedCell} modelCellId={modelCellId} referenceImageUrl={referenceImageUrl} selectedOrganelle={selectedOrganelle} onSelectOrganelle={setSelectedOrganelle} />
         {!generationFailed && (
           <CellScene
@@ -1871,10 +1872,8 @@ function DetailPanel({ selectedCell, selectedOrganelle, favoriteKey, setFavorite
   )
 }
 
-function BottomDeck({ selectedCell, selectedMicroscope, setSelectedMicroscope, uploadedImage, compareCell, onUploadImage, onCompare, onNotify }) {
+function BottomDeck({ selectedMicroscope, setSelectedMicroscope, uploadedImage, onUploadImage, onNotify }) {
   const fileInputRef = useRef(null)
-  const selected = getCell(selectedCell)
-  const compareTarget = getCell(compareCell)
 
   function handleMicroscopeSelect(item) {
     setSelectedMicroscope(item.label)
@@ -1922,26 +1921,6 @@ function BottomDeck({ selectedCell, selectedMicroscope, setSelectedMicroscope, u
             }}
           />
         </div>
-      </div>
-
-      <div className="panel compare-panel">
-        <header className="panel-title">
-          <span>Compare Cells</span>
-          <small>2</small>
-        </header>
-        <button type="button" className="compare-box" onClick={() => onCompare(compareTarget.id)}>
-          <CellThumb cell={selected} selected />
-          <div>
-            <strong>{selected.name.replace(' Cell', '')}</strong>
-            <small>{selected.type}</small>
-          </div>
-          <span className="versus">VS</span>
-          <CellThumb cell={compareTarget} />
-          <div>
-            <strong>{compareTarget.name}</strong>
-            <small>{compareTarget.type.replace('Human ', '')}</small>
-          </div>
-        </button>
       </div>
     </section>
   )
@@ -2667,6 +2646,7 @@ function App() {
             labelVisible={labelVisible}
             renderQuality={settings.quality}
             customCells={customCells}
+            selectedMicroscope={selectedMicroscope}
             onNotify={setToast}
             onExport={handleExport}
             onExporterReady={setSceneExporter}
@@ -2682,13 +2662,10 @@ function App() {
             onNotify={setToast}
           />
           <BottomDeck
-            selectedCell={selectedCell}
             selectedMicroscope={selectedMicroscope}
             setSelectedMicroscope={setSelectedMicroscope}
             uploadedImage={uploadedImage}
             onUploadImage={handleUploadImage}
-            compareCell={compareCell}
-            onCompare={handleOpenCompare}
             onNotify={setToast}
           />
         </div>
