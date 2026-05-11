@@ -28,170 +28,68 @@ import plantCellRender from './assets/cell-plant-render.png'
 import './App.css'
 
 const CELL_TYPES = [
-  { id: 'plant', name: 'Plant Cell', type: 'Eukaryotic Cell', accent: '#82b366' },
-  { id: 'white-blood', name: 'White Blood Cell', type: 'Immune Cell', accent: '#7e6edb' },
-  { id: 'neuron', name: 'Neuron', type: 'Nerve Cell', accent: '#8b5cf6' },
-  { id: 'epithelial', name: 'Epithelial Cell', type: 'Human Tissue Cell', accent: '#e07a7a' },
-  { id: 'bacteria', name: 'Bacteria Cell', type: 'Prokaryotic Cell', accent: '#5fbf9f' },
-  { id: 'animal', name: 'Animal Cell', type: 'Eukaryotic Cell', accent: '#459ccf' },
-  { id: 'muscle', name: 'Muscle Cell', type: 'Muscle Fiber', accent: '#d25762' },
+  { id: 'plant', name: 'Célula vegetal', type: 'Eucariota', accent: '#82b366' },
+  { id: 'white-blood', name: 'Glóbulo blanco', type: 'Célula inmune', accent: '#7e6edb' },
+  { id: 'neuron', name: 'Neurona', type: 'Célula nerviosa', accent: '#8b5cf6' },
+  { id: 'epithelial', name: 'Célula epitelial', type: 'Tejido superficial', accent: '#e07a7a' },
+  { id: 'bacteria', name: 'Célula bacteriana', type: 'Procariota', accent: '#5fbf9f' },
+  { id: 'animal', name: 'Célula animal', type: 'Eucariota', accent: '#459ccf' },
+  { id: 'muscle', name: 'Célula muscular', type: 'Fibra muscular', accent: '#d25762' },
 ]
 
-const SEEDED_GENERATED_CELLS = [
-  {
-    id: 'tripo-epithelial-test',
-    name: 'Tripo Epithelial Test',
-    type: 'AI Generated Epithelial Cell',
-    accent: '#e07a7a',
-    custom: true,
-    template: 'epithelial',
-    imageUrl: '/epithelial_cell_3d_tripo_input.png',
-    generation: {
-      provider: 'tripo',
-      status: 'success',
-      taskId: 'dc44beb1-e1a1-4650-9337-fbe418b7b154',
-      modelUrl: '/generated-models/tripo-epithelial-cell-test.glb',
-      rawModelUrl: '',
-      message: 'Cached GLB from the verified Tripo epithelial test run.',
-    },
-  },
-  {
-    id: 'tripo-plant-test',
-    name: 'Tripo Plant Test',
-    type: 'AI Generated Plant Cell',
-    accent: '#82b366',
-    custom: true,
-    template: 'plant',
-    imageUrl: plantCellRender,
-    generation: {
-      provider: 'tripo',
-      status: 'success',
-      taskId: '1db80a91-e202-4494-b17b-147de74cae81',
-      modelUrl: '/generated-models/tripo-plant-cell-test.glb',
-      rawModelUrl: '',
-      message: 'Cached GLB from the verified Tripo test run.',
-    },
-  },
-]
+const SEEDED_GENERATED_CELLS = []
 
-const KHRONOS_REFERENCE_CELLS = [
-  {
-    id: 'khronos-transmission-test',
-    name: 'Transmission Test',
-    type: 'Khronos PBR Reference',
-    accent: '#72a4bf',
-    custom: true,
-    reference: true,
-    template: 'animal',
-    imageUrl: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/main/2.0/TransmissionTest/screenshot/screenshot_large.png',
-    referenceSummary: 'Official Khronos glTF sample for KHR_materials_transmission. Useful for tuning transparent membranes, glassy shells, and opacity interactions.',
-    referenceLicense: 'CC0, Adobe via Khronos glTF Sample Models',
-    referenceSource: 'https://github.com/KhronosGroup/glTF-Sample-Models/tree/main/2.0/TransmissionTest',
-    generation: {
-      provider: 'reference',
-      requestedProvider: 'reference',
-      status: 'success',
-      taskId: 'khronos-transmission-test',
-      modelUrl: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/main/2.0/TransmissionTest/glTF-Binary/TransmissionTest.glb',
-      rawModelUrl: '',
-      message: 'Remote Khronos GLB reference for transparent material behavior.',
-    },
-  },
-  {
-    id: 'khronos-transmission-roughness',
-    name: 'Transmission Roughness',
-    type: 'Khronos PBR Reference',
-    accent: '#8eb4cf',
-    custom: true,
-    reference: true,
-    template: 'animal',
-    imageUrl: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/main/2.0/TransmissionRoughnessTest/screenshot/screenshot-large.png',
-    referenceSummary: 'Official Khronos glTF sample for transmission, IOR, roughness, and volume. Useful for soft translucent cell walls and membrane haze.',
-    referenceLicense: 'CC-BY 4.0, Ed Mackey / Analytical Graphics via Khronos glTF Sample Models',
-    referenceSource: 'https://github.com/KhronosGroup/glTF-Sample-Models/tree/main/2.0/TransmissionRoughnessTest',
-    generation: {
-      provider: 'reference',
-      requestedProvider: 'reference',
-      status: 'success',
-      taskId: 'khronos-transmission-roughness',
-      modelUrl: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/main/2.0/TransmissionRoughnessTest/glTF-Binary/TransmissionRoughnessTest.glb',
-      rawModelUrl: '',
-      message: 'Remote Khronos GLB reference for IOR and translucent roughness.',
-    },
-  },
-  {
-    id: 'khronos-mosquito-amber',
-    name: 'Mosquito In Amber',
-    type: 'Khronos Bio Reference',
-    accent: '#d18a42',
-    custom: true,
-    reference: true,
-    template: 'bacteria',
-    imageUrl: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/main/2.0/MosquitoInAmber/screenshot/screenshot.jpg',
-    referenceSummary: 'Biological specimen in a transparent amber volume. Useful as a target for organic detail plus translucent material presentation.',
-    referenceLicense: 'CC-BY 4.0, Loic Norgeot / Geoffrey Marchal / Sketchfab via Khronos glTF Sample Models',
-    referenceSource: 'https://github.com/KhronosGroup/glTF-Sample-Models/tree/main/2.0/MosquitoInAmber',
-    generation: {
-      provider: 'reference',
-      requestedProvider: 'reference',
-      status: 'success',
-      taskId: 'khronos-mosquito-amber',
-      modelUrl: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/main/2.0/MosquitoInAmber/glTF-Binary/MosquitoInAmber.glb',
-      rawModelUrl: '',
-      message: 'Remote Khronos biological GLB reference. This model is larger and may take longer to load.',
-    },
-  },
-]
+const KHRONOS_REFERENCE_CELLS = []
 
 const ORGANELLES = {
   nucleus: {
-    label: 'Nucleus',
-    title: 'Nucleus',
-    subtitle: 'Genetic control region',
-    size: 'About 6-10 um',
-    location: 'Central cytoplasm',
-    visible: 'Yes, stained purple',
-    note: 'White blood cells use a lobed nucleus to move through tight tissue spaces while coordinating immune response genes.',
+    label: 'Núcleo',
+    title: 'Núcleo',
+    subtitle: 'Centro de control genético',
+    size: 'Unos 6-10 µm',
+    location: 'Citoplasma central',
+    visible: 'Sí, teñido púrpura',
+    note: 'Los glóbulos blancos tienen un núcleo lobulado que les permite atravesar espacios tisulares estrechos mientras coordinan los genes de la respuesta inmune.',
     accent: '#7b4bb4',
   },
   lysosome: {
-    label: 'Lysosome',
-    title: 'Lysosome',
-    subtitle: 'The cellular cleanup crew',
-    size: 'About 1-2 um',
-    location: 'Blood, lymph, and tissues',
-    visible: 'Yes, especially with stain',
-    note: 'Lysosomes contain enzymes that digest captured material and damaged cell components.',
+    label: 'Lisosoma',
+    title: 'Lisosoma',
+    subtitle: 'Equipo de limpieza celular',
+    size: 'Unos 1-2 µm',
+    location: 'Sangre, linfa y tejidos',
+    visible: 'Sí, especialmente con tinción',
+    note: 'Los lisosomas contienen enzimas que digieren el material capturado y los componentes celulares dañados.',
     accent: '#8d58b8',
   },
   mitochondria: {
-    label: 'Mitochondria',
-    title: 'Mitochondria',
-    subtitle: 'ATP production sites',
-    size: 'About 0.5-1 um',
-    location: 'Cytoplasm',
-    visible: 'Often with fluorescent dye',
-    note: 'Immune cells change mitochondrial activity as they activate, migrate, and respond to infection.',
+    label: 'Mitocondria',
+    title: 'Mitocondria',
+    subtitle: 'Centro de producción de ATP',
+    size: 'Unos 0,5-1 µm',
+    location: 'Citoplasma',
+    visible: 'A menudo con tinte fluorescente',
+    note: 'Las células inmunes modifican su actividad mitocondrial al activarse, migrar y responder a una infección.',
     accent: '#df7046',
   },
   membrane: {
-    label: 'Plasma Membrane',
-    title: 'Plasma Membrane',
-    subtitle: 'Selective outer boundary',
-    size: 'About 7-10 nm',
-    location: 'Cell perimeter',
-    visible: 'Indirectly visible',
-    note: 'The membrane receives immune signals and allows the cell to squeeze through tissue barriers.',
+    label: 'Membrana plasmática',
+    title: 'Membrana plasmática',
+    subtitle: 'Frontera externa selectiva',
+    size: 'Unos 7-10 nm',
+    location: 'Perímetro celular',
+    visible: 'Visible indirectamente',
+    note: 'La membrana recibe señales inmunes y permite a la célula deslizarse entre barreras tisulares.',
     accent: '#7aa4bf',
   },
   granules: {
-    label: 'Secretory Granules',
-    title: 'Secretory Granules',
-    subtitle: 'Immune response packets',
-    size: 'About 0.1-1 um',
-    location: 'Cytoplasm',
-    visible: 'Yes, as colored dots',
-    note: 'Granules store proteins and signaling molecules released during immune defense.',
+    label: 'Gránulos secretorios',
+    title: 'Gránulos secretorios',
+    subtitle: 'Paquetes de respuesta inmune',
+    size: 'Unos 0,1-1 µm',
+    location: 'Citoplasma',
+    visible: 'Sí, como puntos de color',
+    note: 'Los gránulos almacenan proteínas y moléculas señalizadoras que se liberan durante la defensa inmune.',
     accent: '#5b82c4',
   },
 }
@@ -199,67 +97,67 @@ const ORGANELLES = {
 const ORGANELLE_ORDER = ['nucleus', 'lysosome', 'mitochondria', 'membrane', 'granules']
 
 const MICROSCOPE_IMAGES = [
-  { label: 'Light Microscope', tone: 'light', note: 'Bright-field texture and tissue context.' },
-  { label: 'Stained Selection', tone: 'purple', note: 'Contrast-enhanced organelle staining.' },
-  { label: 'Electron Microscope', tone: 'mono', note: 'High-detail grayscale surface scan.' },
+  { label: 'Microscopio óptico', tone: 'light', note: 'Textura de campo claro y contexto tisular.' },
+  { label: 'Sección teñida', tone: 'purple', note: 'Tinción de orgánulos con contraste realzado.' },
+  { label: 'Microscopio electrónico', tone: 'mono', note: 'Escaneo de superficie en escala de grises de alto detalle.' },
 ]
 
 const WORKSPACE_PANELS = {
-  Gallery: 'Saved render angles, microscope snapshots, and exported study plates.',
-  Library: 'Reference structures for cell walls, membranes, nuclei, lysosomes, and mitochondria.',
-  Notebooks: 'Observation notes linked to the selected cell and organelle.',
-  Settings: 'Viewer quality, labels, cross-section defaults, and export preferences.',
-  Compare: 'Side-by-side cell comparison for visual structure and biological role.',
-  Profile: 'Current workspace: Bio Visualization Prototype.',
+  Galería: 'Ángulos guardados, capturas al microscopio y láminas de estudio exportadas.',
+  Biblioteca: 'Estructuras de referencia para paredes, membranas, núcleos, lisosomas y mitocondrias.',
+  Cuadernos: 'Notas de observación vinculadas a la célula y al orgánulo seleccionados.',
+  Ajustes: 'Calidad del visor, etiquetas, cortes por defecto y preferencias de exportación.',
+  Comparar: 'Comparación de células lado a lado para ver estructura visual y función biológica.',
+  Perfil: 'Espacio actual: Prototipo de visualización biológica.',
 }
 
 const CELL_PROFILES = {
   plant: {
-    summary: 'Rigid wall, large vacuole, chloroplast-like structures, Golgi stacks, and a clear nucleus.',
-    occurs: 'Leaves, stems, roots, and photosynthetic tissue.',
-    comparison: 'Has a rigid wall and chloroplast-like organelles; animal cells do not.',
+    summary: 'Pared rígida, vacuola grande, estructuras tipo cloroplasto, pilas de Golgi y un núcleo bien definido.',
+    occurs: 'Hojas, tallos, raíces y tejido fotosintético.',
+    comparison: 'Tiene pared rígida y orgánulos tipo cloroplasto; las células animales no.',
     compareTarget: 'animal',
     organelles: ['membrane', 'nucleus', 'mitochondria', 'granules'],
   },
   'white-blood': {
-    summary: 'Soft immune cell with lobed nucleus, many lysosomes, granules, and deformable membrane.',
-    occurs: 'Blood, lymph, and inflamed tissue.',
-    comparison: 'More mobile and granular than epithelial cells; built for immune response.',
+    summary: 'Célula inmune flexible con núcleo lobulado, muchos lisosomas, gránulos y membrana deformable.',
+    occurs: 'Sangre, linfa y tejido inflamado.',
+    comparison: 'Más móvil y granular que las células epiteliales; diseñada para la respuesta inmune.',
     compareTarget: 'epithelial',
     organelles: ['lysosome', 'nucleus', 'mitochondria', 'membrane', 'granules'],
   },
   neuron: {
-    summary: 'Compact soma with branching dendrite and axon-like extensions for signal routing.',
-    occurs: 'Brain, spinal cord, and peripheral nerves.',
-    comparison: 'Long membrane extensions dominate the shape; most other cells stay compact.',
+    summary: 'Soma compacto con dendritas ramificadas y extensiones tipo axón que conducen señales.',
+    occurs: 'Cerebro, médula espinal y nervios periféricos.',
+    comparison: 'Las extensiones largas de membrana definen su forma; otras células permanecen compactas.',
     compareTarget: 'muscle',
     organelles: ['membrane', 'nucleus', 'mitochondria', 'granules'],
   },
   epithelial: {
-    summary: 'Sheet-like tissue cell with apical ridges, junction cues, membrane boundaries, and nucleus.',
-    occurs: 'Skin, ducts, organ linings, and protective surfaces.',
-    comparison: 'Designed for barrier tissue, unlike free-moving white blood cells.',
+    summary: 'Célula tisular en lámina con crestas apicales, indicios de uniones, límites de membrana y núcleo.',
+    occurs: 'Piel, conductos, revestimientos de órganos y superficies protectoras.',
+    comparison: 'Diseñada para formar tejidos barrera, a diferencia de los glóbulos blancos móviles.',
     compareTarget: 'white-blood',
     organelles: ['membrane', 'nucleus', 'mitochondria', 'granules'],
   },
   bacteria: {
-    summary: 'Prokaryotic capsule with nucleoid DNA, ribosome dots, pili, and a flagellum cue.',
-    occurs: 'Soil, water, gut flora, skin, and many environmental surfaces.',
-    comparison: 'No nucleus or membrane-bound organelles; the DNA sits in a nucleoid region.',
+    summary: 'Cápsula procariota con ADN nucleoide, puntos de ribosomas, pili y un indicio de flagelo.',
+    occurs: 'Suelo, agua, flora intestinal, piel y muchas superficies ambientales.',
+    comparison: 'Sin núcleo ni orgánulos delimitados por membrana; el ADN se encuentra en una región nucleoide.',
     compareTarget: 'animal',
     organelles: ['membrane', 'granules'],
   },
   animal: {
-    summary: 'Flexible eukaryotic cell with nucleus, mitochondria, vesicles, and soft membrane.',
-    occurs: 'Organs, connective tissue, blood-related tissues, and cultured samples.',
-    comparison: 'Lacks the rigid wall shown in plant cells.',
+    summary: 'Célula eucariota flexible con núcleo, mitocondrias, vesículas y membrana blanda.',
+    occurs: 'Órganos, tejido conectivo, tejidos sanguíneos y muestras cultivadas.',
+    comparison: 'Carece de la pared rígida característica de las células vegetales.',
     compareTarget: 'plant',
     organelles: ['membrane', 'nucleus', 'mitochondria', 'lysosome', 'granules'],
   },
   muscle: {
-    summary: 'Elongated fiber-like cell with striation cues and extra mitochondria for contraction.',
-    occurs: 'Skeletal muscle, cardiac tissue, and contractile tissue samples.',
-    comparison: 'Elongated and energy-heavy compared with round animal cells.',
+    summary: 'Célula alargada tipo fibra con indicios de estriación y abundantes mitocondrias para la contracción.',
+    occurs: 'Músculo esquelético, tejido cardíaco y muestras de tejido contráctil.',
+    comparison: 'Alargada y con alta demanda energética frente a las células animales redondas.',
     compareTarget: 'neuron',
     organelles: ['membrane', 'nucleus', 'mitochondria', 'granules'],
   },
@@ -285,17 +183,17 @@ const MODEL_API_BASE = import.meta.env.VITE_MODEL_API_BASE || import.meta.env.VI
 const GENERATION_POLL_INTERVAL_MS = 3500
 const GENERATION_TIMEOUT_MS = 8 * 60 * 1000
 const GENERATION_PROVIDER_OPTIONS = [
-  { id: 'auto', label: 'Auto', description: 'Tripo first, Hunyuan backup.' },
-  { id: 'tripo', label: 'Tripo', description: 'Cloud generation.' },
-  { id: 'hunyuan', label: 'Hunyuan', description: 'Local Hunyuan3D server.' },
+  { id: 'auto', label: 'Auto', description: 'Tripo primero, Hunyuan de respaldo.' },
+  { id: 'tripo', label: 'Tripo', description: 'Generación en la nube.' },
+  { id: 'hunyuan', label: 'Hunyuan', description: 'Servidor local Hunyuan3D.' },
 ]
 const GENERATION_PROVIDER_IDS = new Set(GENERATION_PROVIDER_OPTIONS.map((provider) => provider.id))
 const GENERATION_MODE_OPTIONS = [
-  { id: 'tripo', label: 'Tripo', description: 'Cloud GLB generation.' },
-  { id: 'hunyuan', label: 'Hunyuan', description: 'Local Hunyuan3D GLB generation.' },
-  { id: 'cinematic', label: 'JS Depth', description: 'Browser-side image relief with layered PNG fallback.' },
-  { id: 'auto', label: 'Auto', description: 'Tripo, then Hunyuan, then JS Depth fallback.' },
-  { id: 'local', label: 'Local GLB', description: 'Import an existing GLB or GLTF file.' },
+  { id: 'tripo', label: 'Tripo', description: 'Generación GLB en la nube.' },
+  { id: 'hunyuan', label: 'Hunyuan', description: 'Generación GLB local con Hunyuan3D.' },
+  { id: 'cinematic', label: 'Relieve JS', description: 'Relieve de imagen en el navegador con PNG por capas como respaldo.' },
+  { id: 'auto', label: 'Auto', description: 'Tripo, luego Hunyuan y Relieve JS como respaldo.' },
+  { id: 'local', label: 'GLB local', description: 'Importa un archivo GLB o GLTF existente.' },
 ]
 const GENERATION_MODE_IDS = new Set(GENERATION_MODE_OPTIONS.map((mode) => mode.id))
 
@@ -319,78 +217,78 @@ const DEFAULT_ORGANELLE_BY_CELL = {
 const CELL_DETAIL_OVERRIDES = {
   plant: {
     nucleus: {
-      subtitle: 'The command center',
-      size: '5-10 um in diameter',
-      location: 'Usually central',
-      visible: 'Yes',
-      note: 'The nucleus is surrounded by a double membrane called the nuclear envelope, which contains pores that regulate the movement of molecules in and out.',
-      funFact: 'The nucleus was one of the first cell structures discovered.',
+      subtitle: 'Centro de control',
+      size: '5-10 µm de diámetro',
+      location: 'Normalmente central',
+      visible: 'Sí',
+      note: 'El núcleo está rodeado por una doble membrana llamada envoltura nuclear, con poros que regulan la entrada y salida de moléculas.',
+      funFact: 'El núcleo fue una de las primeras estructuras celulares descubiertas.',
     },
     membrane: {
-      title: 'Cell Wall',
-      subtitle: 'Rigid outer support',
-      size: 'About 0.1-10 um thick',
-      location: 'Outer boundary',
-      visible: 'Yes',
-      note: 'Plant cells have a rigid wall outside the membrane. It gives the cell shape and helps resist pressure from the large central vacuole.',
-      funFact: 'Cellulose fibers make plant cell walls strong and flexible.',
+      title: 'Pared celular',
+      subtitle: 'Sostén rígido externo',
+      size: 'Unos 0,1-10 µm de espesor',
+      location: 'Límite externo',
+      visible: 'Sí',
+      note: 'Las células vegetales tienen una pared rígida fuera de la membrana. Da forma a la célula y ayuda a resistir la presión de la gran vacuola central.',
+      funFact: 'Las fibras de celulosa hacen que las paredes vegetales sean resistentes y flexibles.',
     },
     mitochondria: {
-      note: 'Mitochondria convert stored sugars into usable energy for growth, repair, and transport inside the plant cell.',
-      funFact: 'Plant cells have both mitochondria and chloroplasts.',
+      note: 'Las mitocondrias convierten los azúcares almacenados en energía utilizable para el crecimiento, la reparación y el transporte dentro de la célula vegetal.',
+      funFact: 'Las células vegetales tienen tanto mitocondrias como cloroplastos.',
     },
     granules: {
-      title: 'Golgi Apparatus',
-      subtitle: 'Packaging and transport',
-      note: 'The Golgi modifies, sorts, and packages proteins and lipids before they move to their next destination.',
-      funFact: 'Golgi stacks look like folded ribbons in many educational renders.',
+      title: 'Aparato de Golgi',
+      subtitle: 'Empaquetado y transporte',
+      note: 'El Golgi modifica, clasifica y empaqueta proteínas y lípidos antes de que viajen a su próximo destino.',
+      funFact: 'Las pilas de Golgi se parecen a cintas plegadas en muchas ilustraciones didácticas.',
     },
   },
   'white-blood': {
     lysosome: {
-      note: 'White blood cells carry many lysosomes because they digest captured particles and damaged material during immune response.',
-      funFact: 'The clustered purple granules are emphasized here so they remain readable while rotating.',
+      note: 'Los glóbulos blancos tienen muchos lisosomas porque digieren partículas capturadas y material dañado durante la respuesta inmune.',
+      funFact: 'Los gránulos púrpura agrupados se destacan aquí para que sigan siendo legibles al rotar.',
     },
     nucleus: {
-      note: 'The lobed nucleus is a key visual feature of many immune cells and helps the cell deform through narrow tissue gaps.',
+      note: 'El núcleo lobulado es un rasgo visual clave de muchas células inmunes y ayuda a la célula a deformarse a través de espacios tisulares estrechos.',
     },
   },
   neuron: {
     membrane: {
-      title: 'Axon and Dendrites',
-      subtitle: 'Signal-routing branches',
-      location: 'Extending from the soma',
-      note: 'Neurons depend on long membrane extensions to receive and transmit electrical signals across large distances.',
-      funFact: 'The branching structure matters more visually than a perfectly round cell body.',
+      title: 'Axón y dendritas',
+      subtitle: 'Ramificaciones que conducen señales',
+      location: 'Salen del soma',
+      note: 'Las neuronas dependen de largas extensiones de membrana para recibir y transmitir señales eléctricas a grandes distancias.',
+      funFact: 'La estructura ramificada importa más visualmente que un cuerpo celular perfectamente redondo.',
     },
   },
   epithelial: {
     membrane: {
-      title: 'Apical Surface',
-      subtitle: 'Barrier and contact layer',
-      location: 'Tissue-facing edge',
-      note: 'Epithelial cells form sheets. The surface ridges and junction lines make that tissue architecture visible.',
+      title: 'Superficie apical',
+      subtitle: 'Capa de barrera y contacto',
+      location: 'Borde orientado al tejido',
+      note: 'Las células epiteliales forman láminas. Las crestas superficiales y las líneas de unión hacen visible esa arquitectura tisular.',
     },
   },
   bacteria: {
     granules: {
-      title: 'Nucleoid and Ribosomes',
-      subtitle: 'Prokaryotic core material',
-      size: 'Not membrane bound',
-      location: 'Central cytoplasm',
-      note: 'Bacteria do not have a nucleus. The blue DNA coil and small ribosome dots represent the prokaryotic interior.',
-      funFact: 'The flagellum and pili are exaggerated for readability in the 3D viewer.',
+      title: 'Nucleoide y ribosomas',
+      subtitle: 'Material central procariota',
+      size: 'Sin membrana propia',
+      location: 'Citoplasma central',
+      note: 'Las bacterias no tienen núcleo. La espiral azul de ADN y los pequeños puntos de ribosomas representan el interior procariota.',
+      funFact: 'El flagelo y los pili están exagerados para mejorar la legibilidad en el visor 3D.',
     },
   },
   animal: {
     nucleus: {
-      note: 'Animal cells are shown with a softer membrane, central nucleus, mitochondria, and transport structures without a rigid wall.',
+      note: 'Las células animales se muestran con una membrana más blanda, núcleo central, mitocondrias y estructuras de transporte, sin pared rígida.',
     },
   },
   muscle: {
     mitochondria: {
-      note: 'Muscle fibers contain many mitochondria because contraction needs sustained ATP production.',
-      funFact: 'The stripe pattern is a simplified sarcomere cue, not a literal molecular model.',
+      note: 'Las fibras musculares contienen muchas mitocondrias porque la contracción requiere producción sostenida de ATP.',
+      funFact: 'El patrón de bandas es una representación simplificada del sarcómero, no un modelo molecular literal.',
     },
   },
 }
@@ -440,7 +338,7 @@ function getCellProfile(cellId, customCells = getStoredCustomCells()) {
       return {
         ...baseProfile,
         summary: customCell.referenceSummary,
-        comparison: `${customCell.name} is a Khronos glTF reference asset for inspecting material behavior and GLB loader compatibility, not a biological teaching model.`,
+        comparison: `${customCell.name} es un recurso de referencia glTF de Khronos para inspeccionar el comportamiento de materiales y la compatibilidad del cargador GLB, no un modelo didáctico biológico.`,
         occurs: customCell.referenceSource,
         organelles: baseProfile.organelles,
       }
@@ -451,16 +349,16 @@ function getCellProfile(cellId, customCells = getStoredCustomCells()) {
     return {
       ...baseProfile,
       summary: isCinematic
-        ? `Browser-generated JS depth relief from the uploaded image, using ${getCell(customCell.template).name} biology as context.`
+        ? `Relieve JS generado en el navegador a partir de la imagen subida, usando la biología de ${getCell(customCell.template).name} como contexto.`
         : hasGeneratedModel
-        ? `AI-generated GLB from the uploaded image, using ${getCell(customCell.template).name} biology as context.`
-        : `Uploaded image queued for image-to-3D generation; fallback scaffold is ${getCell(customCell.template).name}.`,
+        ? `GLB generado por IA a partir de la imagen subida, usando la biología de ${getCell(customCell.template).name} como contexto.`
+        : `Imagen subida en cola para la generación imagen-a-3D; el armazón de respaldo es ${getCell(customCell.template).name}.`,
       comparison: isCinematic
-        ? 'This custom sample uses a browser-generated displacement mesh plus transparent depth slabs, not a GLB or full AI-generated mesh.'
+        ? 'Esta muestra personalizada usa una malla de desplazamiento generada en el navegador y planos de profundidad transparentes, no un GLB ni una malla completa generada por IA.'
         : hasGeneratedModel
-        ? 'This custom sample is loaded as a real generated GLB in the WebGL viewer.'
-        : `This custom sample will use the ${getCell(customCell.template).name} fallback while generation is running.`,
-      occurs: 'Uploaded by user as a custom microscope reference.',
+        ? 'Esta muestra personalizada se carga como un GLB real en el visor WebGL.'
+        : `Esta muestra personalizada usará el armazón de ${getCell(customCell.template).name} mientras se ejecuta la generación.`,
+      occurs: 'Subida por el usuario como referencia personalizada de microscopio.',
       organelles: baseProfile.organelles,
     }
   }
@@ -1000,8 +898,8 @@ function getProviderPlan(provider) {
 
 function getProviderLabel(provider) {
   if (provider === 'local') return 'Local'
-  if (provider === 'cinematic') return 'JS Depth'
-  if (provider === 'reference') return 'Khronos Reference'
+  if (provider === 'cinematic') return 'Relieve JS'
+  if (provider === 'reference') return 'Referencia Khronos'
   return GENERATION_PROVIDER_OPTIONS.find((item) => item.id === provider)?.label ?? 'Tripo'
 }
 
@@ -1087,13 +985,13 @@ function isLocalModelFile(file) {
 function createCustomCell(fileName, imageUrl, options = {}) {
   const template = inferCellTemplate(fileName)
   const base = getCell(template)
-  const name = cleanFileName(fileName) || 'Uploaded Cell'
+  const name = cleanFileName(fileName) || 'Célula subida'
   const provider = options.provider || 'tripo'
 
   return {
     id: `custom-${Date.now()}`,
     name: name.length > 20 ? `${name.slice(0, 20)}...` : name,
-    type: options.type || `Uploaded ${base.name}`,
+    type: options.type || `${base.name} subida`,
     accent: base.accent,
     custom: true,
     template,
@@ -1105,7 +1003,7 @@ function createCustomCell(fileName, imageUrl, options = {}) {
       taskId: options.taskId || '',
       modelUrl: options.modelUrl || '',
       rawModelUrl: options.rawModelUrl || '',
-      message: options.message || 'Waiting for image-to-3D generation.',
+      message: options.message || 'Esperando generación imagen-a-3D.',
     },
   }
 }
@@ -2136,7 +2034,7 @@ function CinematicLayerVisual({ imageUrl, selectedOrganelle, onSelectOrganelle, 
         <div
           className={`layered-png-stage ${autoRotate ? 'auto' : ''}`}
           style={{ '--layer-aspect': visual?.aspect || 1 }}
-          aria-label="Layered transparent PNG cell visual"
+          aria-label="Visual de célula en PNG transparente por capas"
         >
           {visual ? (
             visual.layers.map((layer) => (
@@ -2157,7 +2055,7 @@ function CinematicLayerVisual({ imageUrl, selectedOrganelle, onSelectOrganelle, 
           ) : (
             <div className="layered-png-loading">
               <span />
-              Building PNG layers
+              Generando capas PNG
             </div>
           )}
         </div>
@@ -2167,7 +2065,7 @@ function CinematicLayerVisual({ imageUrl, selectedOrganelle, onSelectOrganelle, 
         onSelectOrganelle(selectedOrganelle)
       }}>
         <span />
-        {ORGANELLES[selectedOrganelle]?.title || 'Layer'}
+        {ORGANELLES[selectedOrganelle]?.title || 'Capa'}
       </button>
     </div>
   )
@@ -2228,22 +2126,22 @@ function CellFallback({ selectedCell, modelCellId, referenceImageUrl, selectedOr
 
   if (referenceImageUrl) {
     return (
-      <div className="cell-fallback upload-render-fallback" aria-label="Uploaded cell image fallback">
-        <img src={referenceImageUrl} alt="Uploaded cell reference" />
+      <div className="cell-fallback upload-render-fallback" aria-label="Imagen de la célula subida (respaldo)">
+        <img src={referenceImageUrl} alt="Referencia de la célula subida" />
       </div>
     )
   }
 
   if (visualCellId === 'plant') {
     return (
-      <div className="cell-fallback plant-render-fallback" aria-label="Plant cell image fallback">
-        <img src={plantCellRender} alt="Detailed plant cell fallback render" />
+      <div className="cell-fallback plant-render-fallback" aria-label="Imagen de célula vegetal (respaldo)">
+        <img src={plantCellRender} alt="Render detallado de respaldo de la célula vegetal" />
       </div>
     )
   }
 
   return (
-    <div className="cell-fallback" aria-label="Cell illustration fallback">
+    <div className="cell-fallback" aria-label="Ilustración de respaldo de la célula">
       <button
         type="button"
         className={selectedOrganelle === 'membrane' ? `fallback-cell-body ${visualCellId} active` : `fallback-cell-body ${visualCellId}`}
@@ -2313,7 +2211,7 @@ function LeftSidebar({ selectedCell, setSelectedCell, selectedOrganelle, setSele
         <header className="panel-title">
           <span>
             <SparklesIcon size={14} />
-            Cell Types
+            Tipos de célula
           </span>
           <ChevronDown size={14} />
         </header>
@@ -2340,7 +2238,7 @@ function LeftSidebar({ selectedCell, setSelectedCell, selectedOrganelle, setSele
         <header className="panel-title">
           <span>
             <CircleDot size={14} />
-            Organelles
+            Orgánulos
           </span>
           <ChevronDown size={14} />
         </header>
@@ -2365,14 +2263,14 @@ function LeftSidebar({ selectedCell, setSelectedCell, selectedOrganelle, setSele
 
 function ViewerControls({ crossSection, setCrossSection, viewMode, setViewMode }) {
   const modes = [
-    { id: 'solid', icon: Box, label: 'Solid' },
-    { id: 'layers', icon: Layers3, label: 'Layers' },
-    { id: 'focus', icon: CircleDot, label: 'Focus' },
+    { id: 'solid', icon: Box, label: 'Sólido' },
+    { id: 'layers', icon: Layers3, label: 'Capas' },
+    { id: 'focus', icon: CircleDot, label: 'Foco' },
   ]
 
   return (
     <div className="viewer-controls">
-      <span>View Mode</span>
+      <span>Modo de vista</span>
       <div className="mode-buttons">
         {modes.map((mode) => {
           const Icon = mode.icon
@@ -2390,7 +2288,7 @@ function ViewerControls({ crossSection, setCrossSection, viewMode, setViewMode }
         })}
       </div>
       <label className="toggle-row">
-        <span>Cross-Section</span>
+        <span>Corte transversal</span>
         <input type="checkbox" checked={crossSection} onChange={(event) => setCrossSection(event.target.checked)} />
         <i />
       </label>
@@ -2413,20 +2311,20 @@ function CenterStage({ selectedCell, selectedOrganelle, setSelectedOrganelle, cr
   const generatedModelUrl = getGeneratedModelUrl(cell)
   const generation = cell.custom ? cell.generation : null
   const generationProviderLabel = getProviderLabel(generation?.provider)
-  const generationFailureTitle = generation?.requestedProvider === 'auto' ? '3D generation failed' : `${generationProviderLabel} generation failed`
+  const generationFailureTitle = generation?.requestedProvider === 'auto' ? 'Falló la generación 3D' : `Falló la generación con ${generationProviderLabel}`
   const isCinematicCell = cell.custom && generation?.provider === 'cinematic'
   const detail = getOrganelleDetail(selectedCell, selectedOrganelle)
   const webglAvailable = canUseWebGL()
   const generationPending = cell.custom && !generatedModelUrl && generation?.status && !['failed', 'local'].includes(generation.status)
   const generationFailed = cell.custom && !generatedModelUrl && generation?.status === 'failed'
   const stageStatusText = isCinematicCell
-    ? `JS image relief · ${autoRotate ? 'Auto orbit' : 'Manual orbit'} · ${viewMode}`
-    : `${generatedModelUrl ? `${generationProviderLabel} GLB loaded` : generationFailed ? `${generationProviderLabel} failed; source image shown` : referenceImageUrl ? `${generationProviderLabel} ${generation?.status || 'pending'}` : webglAvailable ? 'WebGL live 3D' : 'Fallback image'} · ${autoRotate || proofMode ? 'Auto rotate' : 'Manual orbit'} · ${viewMode}`
+    ? `Relieve JS de imagen · ${autoRotate ? 'Órbita automática' : 'Órbita manual'} · ${viewMode}`
+    : `${generatedModelUrl ? `GLB de ${generationProviderLabel} cargado` : generationFailed ? `${generationProviderLabel} falló; se muestra la imagen de origen` : referenceImageUrl ? `${generationProviderLabel} ${generation?.status || 'pendiente'}` : webglAvailable ? 'WebGL 3D en vivo' : 'Imagen de respaldo'} · ${autoRotate || proofMode ? 'Rotación automática' : 'Órbita manual'} · ${viewMode}`
   const referenceLabel = isCinematicCell
-    ? 'Source image used for browser-side JS depth relief'
+    ? 'Imagen de origen usada para el relieve JS en el navegador'
     : generatedModelUrl
-    ? `Source image used for ${generationProviderLabel} 3D generation`
-    : `Source image for ${generationProviderLabel} generation`
+    ? `Imagen de origen usada para la generación 3D con ${generationProviderLabel}`
+    : `Imagen de origen para la generación con ${generationProviderLabel}`
   const viewerResetKey = `${selectedCell}-${generatedModelUrl}-${generation?.provider || 'built-in'}-${resetNonce}`
   const activeViewerError = viewerError?.key === viewerResetKey ? viewerError.message : ''
   const viewerFallback = (
@@ -2442,20 +2340,20 @@ function CenterStage({ selectedCell, selectedOrganelle, setSelectedOrganelle, cr
   function handleRotate() {
     const next = !autoRotate
     setAutoRotate(next)
-    onNotify(next ? 'Auto rotate enabled' : 'Auto rotate paused')
+    onNotify(next ? 'Rotación automática activada' : 'Rotación automática pausada')
   }
 
   function handleIsolate() {
     const next = !isIsolated
     setIsIsolated(next)
     if (next) setViewMode('focus')
-    onNotify(next ? `${detail.title} focus mode` : 'Focus mode off')
+    onNotify(next ? `Modo enfoque: ${detail.title}` : 'Modo enfoque desactivado')
   }
 
   function handleHideOthers() {
     const next = !hideOthers
     setHideOthers(next)
-    onNotify(next ? `Showing ${detail.title} with cell shell` : 'All structures visible')
+    onNotify(next ? `Mostrando ${detail.title} con la envoltura celular` : 'Todas las estructuras visibles')
   }
 
   function handleResetView() {
@@ -2465,7 +2363,7 @@ function CenterStage({ selectedCell, selectedOrganelle, setSelectedOrganelle, cr
     setProofMode(false)
     setViewMode('layers')
     setResetNonce((value) => value + 1)
-    onNotify('View reset')
+    onNotify('Vista restablecida')
   }
 
   function handleProofMode() {
@@ -2476,7 +2374,7 @@ function CenterStage({ selectedCell, selectedOrganelle, setSelectedOrganelle, cr
       setHideOthers(false)
       setAutoRotate(true)
     }
-    onNotify(next ? '3D proof mode: axes, grid, exploded meshes' : '3D proof mode off')
+    onNotify(next ? 'Modo prueba 3D: ejes, rejilla y mallas separadas' : 'Modo prueba 3D desactivado')
   }
 
   async function handleScreenshot() {
@@ -2485,15 +2383,15 @@ function CenterStage({ selectedCell, selectedOrganelle, setSelectedOrganelle, cr
       : downloadCanvasImage(`${selectedCell}-${selectedOrganelle}.png`)
     setCapturePulse(true)
     window.setTimeout(() => setCapturePulse(false), 280)
-    onNotify(ok ? 'Screenshot downloaded' : 'Screenshot unavailable in this browser')
+    onNotify(ok ? 'Captura descargada' : 'Captura no disponible en este navegador')
   }
 
   function handleViewerError(error) {
     console.error(error)
-    const message = error instanceof Error ? error.message : 'The saved 3D preview could not be loaded.'
+    const message = error instanceof Error ? error.message : 'No se pudo cargar la vista previa 3D guardada.'
     setViewerError({ key: viewerResetKey, message })
     onExporterReady?.(null)
-    onNotify('3D preview unavailable; fallback view shown')
+    onNotify('Vista 3D no disponible; se muestra la vista de respaldo')
   }
 
   useEffect(() => {
@@ -2539,14 +2437,14 @@ function CenterStage({ selectedCell, selectedOrganelle, setSelectedOrganelle, cr
       </div>
       {referenceImageUrl && (
         <div className="custom-reference-layer">
-          <img src={referenceImageUrl} alt={`${cell.name} uploaded reference`} />
+          <img src={referenceImageUrl} alt={`Referencia subida de ${cell.name}`} />
           <span>{referenceLabel}</span>
         </div>
       )}
       {generationPending && (
         <div className="generation-overlay">
-          <strong>{generation.status === 'uploading' ? `Uploading to ${generationProviderLabel}` : `Generating with ${generationProviderLabel}`}</strong>
-          <span>{generation.message || 'Waiting for AI-generated GLB...'}</span>
+          <strong>{generation.status === 'uploading' ? `Subiendo a ${generationProviderLabel}` : `Generando con ${generationProviderLabel}`}</strong>
+          <span>{generation.message || 'Esperando GLB generado por IA...'}</span>
           <div className="generation-meter">
             <i />
           </div>
@@ -2555,25 +2453,25 @@ function CenterStage({ selectedCell, selectedOrganelle, setSelectedOrganelle, cr
       {generationFailed && (
         <div className="generation-overlay failed">
           <strong>{generationFailureTitle}</strong>
-          <span>{generation.message || 'The saved upload failed before a GLB was returned.'}</span>
-          <button type="button" onClick={() => onRetryGeneration?.(cell.id)}>Retry Generation</button>
+          <span>{generation.message || 'La carga guardada falló antes de obtener un GLB.'}</span>
+          <button type="button" onClick={() => onRetryGeneration?.(cell.id)}>Reintentar generación</button>
         </div>
       )}
       {activeViewerError && !generationFailed && (
         <div className="generation-overlay failed">
-          <strong>3D preview unavailable</strong>
-          <span>{generatedModelUrl ? 'The saved GLB could not be loaded. Showing the saved source image or fallback cell instead.' : activeViewerError}</span>
-          {cell.custom && !cell.reference && cell.imageUrl && <button type="button" onClick={() => onRetryGeneration?.(cell.id)}>Retry Generation</button>}
+          <strong>Vista 3D no disponible</strong>
+          <span>{generatedModelUrl ? 'No se pudo cargar el GLB guardado. Se muestra la imagen de origen guardada o la célula de respaldo.' : activeViewerError}</span>
+          {cell.custom && !cell.reference && cell.imageUrl && <button type="button" onClick={() => onRetryGeneration?.(cell.id)}>Reintentar generación</button>}
         </div>
       )}
       <button type="button" className={proofMode ? 'proof-launcher active' : 'proof-launcher'} onClick={handleProofMode} aria-pressed={proofMode}>
         <Box size={15} />
-        3D Proof
+        Prueba 3D
       </button>
       {proofMode && (
         <div className="proof-badge">
-          <strong>{isCinematicCell ? 'JS IMAGE RELIEF' : 'LIVE WEBGL 3D'}</strong>
-          <span>{isCinematicCell ? 'Texture displacement · transparent depth slabs · OrbitControls' : generatedModelUrl ? `${generationProviderLabel} GLB · OrbitControls · GLB export` : referenceImageUrl ? `${generationProviderLabel} task pending · fallback 3D scaffold` : 'Exploded meshes · XYZ axes · GLB export'}</span>
+          <strong>{isCinematicCell ? 'RELIEVE JS DE IMAGEN' : 'WEBGL 3D EN VIVO'}</strong>
+          <span>{isCinematicCell ? 'Desplazamiento de textura · planos de profundidad transparentes · OrbitControls' : generatedModelUrl ? `GLB de ${generationProviderLabel} · OrbitControls · exportación GLB` : referenceImageUrl ? `Tarea ${generationProviderLabel} pendiente · armazón 3D de respaldo` : 'Mallas separadas · ejes XYZ · exportación GLB'}</span>
         </div>
       )}
       {labelVisible && (
@@ -2589,32 +2487,32 @@ function CenterStage({ selectedCell, selectedOrganelle, setSelectedOrganelle, cr
       <div className="stage-toolbar">
         <button type="button" className={autoRotate ? 'active' : ''} onClick={handleRotate} aria-pressed={autoRotate}>
           <Move3D size={14} />
-          Rotate
+          Rotar
         </button>
         <button type="button" className={isIsolated ? 'active' : ''} onClick={handleIsolate} aria-pressed={isIsolated}>
           <Eye size={14} />
-          Isolate
+          Aislar
         </button>
         <button type="button" className={hideOthers ? 'active' : ''} onClick={handleHideOthers} aria-pressed={hideOthers}>
           <Layers3 size={14} />
-          Hide Others
+          Ocultar resto
         </button>
         <button type="button" onClick={handleResetView}>
           <RotateCcw size={14} />
-          Reset View
+          Restablecer vista
         </button>
         <button type="button" className={proofMode ? 'active proof-active' : ''} onClick={handleProofMode} aria-pressed={proofMode}>
           <Box size={14} />
-          3D Proof
+          Prueba 3D
         </button>
         <span />
         <button type="button" onClick={handleScreenshot}>
           <Camera size={14} />
-          Screenshot
+          Captura
         </button>
         <button type="button" onClick={onExport}>
           <Upload size={14} />
-          3D Export
+          Exportar 3D
         </button>
       </div>
     </section>
@@ -2629,20 +2527,20 @@ function DetailPanel({ selectedCell, selectedOrganelle, favoriteKey, setFavorite
   function toggleFavorite() {
     const next = isFavorite ? '' : currentKey
     setFavoriteKey(next)
-    onNotify(isFavorite ? `${detail.title} removed from favorites` : `${detail.title} saved to favorites`)
+    onNotify(isFavorite ? `${detail.title} eliminado de favoritos` : `${detail.title} guardado en favoritos`)
   }
 
   function toggleLabel() {
     const next = !labelVisible
     setLabelVisible(next)
-    onNotify(next ? 'Stage label visible' : 'Stage label hidden')
+    onNotify(next ? 'Etiqueta del escenario visible' : 'Etiqueta del escenario oculta')
   }
 
   return (
     <aside className="right-rail">
       <section className="panel detail-panel">
         <header className="detail-title">
-          <span>Organelle Details</span>
+          <span>Detalles del orgánulo</span>
           <button type="button" className={isFavorite ? 'detail-fav active' : 'detail-fav'} onClick={toggleFavorite} aria-pressed={isFavorite}>
             <Heart size={15} fill={isFavorite ? 'currentColor' : 'none'} />
           </button>
@@ -2661,21 +2559,21 @@ function DetailPanel({ selectedCell, selectedOrganelle, favoriteKey, setFavorite
         </div>
         <dl className="detail-grid">
           <div>
-            <dt>Size</dt>
+            <dt>Tamaño</dt>
             <dd>{detail.size}</dd>
           </div>
           <div>
-            <dt>Location</dt>
+            <dt>Ubicación</dt>
             <dd>{detail.location}</dd>
           </div>
           <div>
-            <dt>Visible in LM</dt>
+            <dt>Visible al microscopio</dt>
             <dd>{detail.visible}</dd>
           </div>
           <div>
-            <dt>Label</dt>
+            <dt>Etiqueta</dt>
             <dd>
-              <button type="button" className={labelVisible ? 'mini-toggle active' : 'mini-toggle'} onClick={toggleLabel} aria-pressed={labelVisible} aria-label="Toggle label" />
+              <button type="button" className={labelVisible ? 'mini-toggle active' : 'mini-toggle'} onClick={toggleLabel} aria-pressed={labelVisible} aria-label="Alternar etiqueta" />
               <span className="color-dot" style={{ background: detail.accent }} />
             </dd>
           </div>
@@ -2684,15 +2582,15 @@ function DetailPanel({ selectedCell, selectedOrganelle, favoriteKey, setFavorite
 
       <section className="panel notes-panel">
         <header className="panel-title">
-          <span>Biological Notes</span>
+          <span>Notas biológicas</span>
         </header>
         <p>{detail.note}</p>
-        <blockquote>{detail.funFact ?? 'Some white blood cells can change shape to squeeze between blood vessel walls and reach infected tissue.'}</blockquote>
+        <blockquote>{detail.funFact ?? 'Algunos glóbulos blancos pueden cambiar de forma para atravesar las paredes de los vasos sanguíneos y alcanzar tejido infectado.'}</blockquote>
       </section>
 
       <section className="panel occurs-panel">
         <header className="panel-title">
-          <span>Where It Occurs</span>
+          <span>Dónde aparece</span>
         </header>
         <div className="body-map">
           <div className="body-line" />
@@ -2721,11 +2619,11 @@ function BottomDeck({ selectedCell, selectedMicroscope, setSelectedMicroscope, u
     <section className="bottom-deck">
       <div className="panel media-panel">
         <header className="panel-title">
-          <span>Microscope View</span>
+          <span>Vista al microscopio</span>
           <small>3</small>
         </header>
         <div className="generation-mode-row">
-          <span>Generate Mode</span>
+          <span>Modo de generación</span>
           <div className="generation-mode-pills">
             {GENERATION_MODE_OPTIONS.map((mode) => (
               <button
@@ -2734,7 +2632,7 @@ function BottomDeck({ selectedCell, selectedMicroscope, setSelectedMicroscope, u
                 className={generationMode === mode.id ? 'active' : ''}
                 onClick={() => {
                   onGenerationModeChange(mode.id)
-                  onNotify(`${mode.label} mode selected`)
+                  onNotify(`Modo ${mode.label} seleccionado`)
                 }}
                 title={mode.description}
               >
@@ -2762,7 +2660,7 @@ function BottomDeck({ selectedCell, selectedMicroscope, setSelectedMicroscope, u
             onClick={() => fileInputRef.current?.click()}
           >
             {uploadedImage?.url ? <Image size={16} /> : <Box size={16} />}
-            {uploadedImage?.name || 'Add Image / GLB'}
+            {uploadedImage?.name || 'Añadir imagen / GLB'}
           </button>
           <input
             ref={fileInputRef}
@@ -2781,20 +2679,20 @@ function BottomDeck({ selectedCell, selectedMicroscope, setSelectedMicroscope, u
 
       <div className="panel compare-panel">
         <header className="panel-title">
-          <span>Compare Cells</span>
+          <span>Comparar células</span>
           <small>2</small>
         </header>
         <button type="button" className="compare-box" onClick={() => onCompare(compareTarget.id)}>
           <CellThumb cell={selected} selected />
           <div>
-            <strong>{selected.name.replace(' Cell', '')}</strong>
+            <strong>{selected.name}</strong>
             <small>{selected.type}</small>
           </div>
           <span className="versus">VS</span>
           <CellThumb cell={compareTarget} />
           <div>
             <strong>{compareTarget.name}</strong>
-            <small>{compareTarget.type.replace('Human ', '')}</small>
+            <small>{compareTarget.type}</small>
           </div>
         </button>
       </div>
@@ -2806,7 +2704,7 @@ function StudioHeader({ activePanel, setActivePanel, onNotify }) {
   function openPanel(panel) {
     const next = activePanel === panel ? null : panel
     setActivePanel(next)
-    onNotify(next ? `${panel} opened` : `${panel} closed`)
+    onNotify(next ? `${panel} abierto` : `${panel} cerrado`)
   }
 
   return (
@@ -2816,29 +2714,29 @@ function StudioHeader({ activePanel, setActivePanel, onNotify }) {
           <CellThumb cell={CELL_TYPES[1]} selected />
         </div>
         <div>
-          <strong>Cell Architecture Studio</strong>
-          <span>Explore life at the microscopic level</span>
+          <strong>Estudio Celular</strong>
+          <span>Explora la vida a nivel microscópico</span>
         </div>
       </div>
       <nav className="studio-nav">
-        <button type="button" className={activePanel === 'Gallery' ? 'active' : ''} onClick={() => openPanel('Gallery')}>
+        <button type="button" className={activePanel === 'Galería' ? 'active' : ''} onClick={() => openPanel('Galería')}>
           <Grid3X3 size={15} />
-          Gallery
+          Galería
         </button>
-        <button type="button" className={activePanel === 'Library' ? 'active' : ''} onClick={() => openPanel('Library')}>
+        <button type="button" className={activePanel === 'Biblioteca' ? 'active' : ''} onClick={() => openPanel('Biblioteca')}>
           <Library size={15} />
-          Library
+          Biblioteca
         </button>
-        <button type="button" className={activePanel === 'Notebooks' ? 'active' : ''} onClick={() => openPanel('Notebooks')}>
+        <button type="button" className={activePanel === 'Cuadernos' ? 'active' : ''} onClick={() => openPanel('Cuadernos')}>
           <BookOpen size={15} />
-          Notebooks
+          Cuadernos
         </button>
-        <button type="button" className={activePanel === 'Settings' ? 'active' : ''} onClick={() => openPanel('Settings')}>
+        <button type="button" className={activePanel === 'Ajustes' ? 'active' : ''} onClick={() => openPanel('Ajustes')}>
           <Settings size={15} />
-          Settings
+          Ajustes
         </button>
       </nav>
-      <button type="button" className={activePanel === 'Profile' ? 'profile-button active' : 'profile-button'} onClick={() => openPanel('Profile')}>
+      <button type="button" className={activePanel === 'Perfil' ? 'profile-button active' : 'profile-button'} onClick={() => openPanel('Perfil')}>
         <Dna size={18} />
         <ChevronDown size={13} />
       </button>
@@ -2881,10 +2779,10 @@ function WorkspaceDrawer({
   const profile = getCellProfile(selectedCell)
   const noteKey = `${selectedCell}:${selectedOrganelle}`
   const noteValue = notes[noteKey] ?? ''
-  const savedFavorite = favoriteKey ? favoriteKey.replace(':', ' / ') : 'None'
+  const savedFavorite = favoriteKey ? favoriteKey.replace(':', ' / ') : 'Ninguna'
 
   function renderContent() {
-    if (activePanel === 'Gallery') {
+    if (activePanel === 'Galería') {
       return (
         <div className="drawer-content">
           <div className="gallery-hero">
@@ -2895,21 +2793,21 @@ function WorkspaceDrawer({
             </div>
           </div>
           <div className="drawer-actions">
-            <button type="button" className="drawer-primary" onClick={onSaveGallery}>Save View</button>
-            <button type="button" className="drawer-secondary" onClick={onExport}>Export GLB</button>
+            <button type="button" className="drawer-primary" onClick={onSaveGallery}>Guardar vista</button>
+            <button type="button" className="drawer-secondary" onClick={onExport}>Exportar GLB</button>
           </div>
           {uploadedImage && (
             <div className="uploaded-tile" style={{ '--upload-preview': `url(${uploadedImage.url})` }}>
               <span />
               <div>
                 <strong>{uploadedImage.name}</strong>
-                <small>Attached microscope reference</small>
+                <small>Referencia de microscopio adjunta</small>
               </div>
             </div>
           )}
           <div className="drawer-list">
             {galleryItems.length === 0 ? (
-              <p className="empty-state">No saved views yet.</p>
+              <p className="empty-state">Aún no hay vistas guardadas.</p>
             ) : (
               galleryItems.map((item) => {
                 const itemCell = getCell(item.cellId)
@@ -2921,7 +2819,7 @@ function WorkspaceDrawer({
                     onClick={() => {
                       onSelectCell(item.cellId)
                       onSelectOrganelle(item.organelleId)
-                      onNotify('Saved view restored')
+                      onNotify('Vista guardada restaurada')
                     }}
                   >
                     <CellThumb cell={itemCell} selected={item.cellId === selectedCell} />
@@ -2934,38 +2832,15 @@ function WorkspaceDrawer({
               })
             )}
           </div>
-          {galleryItems.length > 0 && <button type="button" className="drawer-secondary full" onClick={onClearGallery}>Clear Gallery</button>}
+          {galleryItems.length > 0 && <button type="button" className="drawer-secondary full" onClick={onClearGallery}>Vaciar galería</button>}
         </div>
       )
     }
 
-    if (activePanel === 'Library') {
+    if (activePanel === 'Biblioteca') {
       return (
         <div className="drawer-content">
           <p className="drawer-copy">{profile.summary}</p>
-          <div className="reference-section">
-            <strong>Khronos Reference Models</strong>
-            <span>Auxiliary GLB/PBR samples for material and loader checks.</span>
-            <div className="reference-grid">
-              {KHRONOS_REFERENCE_CELLS.map((reference) => (
-                <button
-                  key={reference.id}
-                  type="button"
-                  className={selectedCell === reference.id ? 'reference-card active' : 'reference-card'}
-                  onClick={() => {
-                    onSelectCell(reference.id)
-                    onNotify(`${reference.name} reference loaded`)
-                  }}
-                >
-                  <CellThumb cell={reference} selected={selectedCell === reference.id} />
-                  <span>
-                    <strong>{reference.name}</strong>
-                    <small>{reference.referenceLicense}</small>
-                  </span>
-                </button>
-              ))}
-            </div>
-          </div>
           <div className="library-grid">
             {getAvailableOrganelleIds(selectedCell).map((id) => {
               const item = getOrganelleDetail(selectedCell, id)
@@ -2976,7 +2851,7 @@ function WorkspaceDrawer({
                   className={selectedOrganelle === id ? 'library-card active' : 'library-card'}
                   onClick={() => {
                     onSelectOrganelle(id)
-                    onNotify(`${item.title} selected`)
+                    onNotify(`${item.title} seleccionado`)
                   }}
                 >
                   <span style={{ background: item.accent }} />
@@ -2990,7 +2865,7 @@ function WorkspaceDrawer({
       )
     }
 
-    if (activePanel === 'Notebooks') {
+    if (activePanel === 'Cuadernos') {
       return (
         <div className="drawer-content">
           <label className="note-editor">
@@ -2998,57 +2873,60 @@ function WorkspaceDrawer({
             <textarea
               value={noteValue}
               onChange={(event) => onUpdateNote(noteKey, event.target.value)}
-              placeholder="Record observations, questions, or narration notes..."
+              placeholder="Registra observaciones, preguntas o notas de narración..."
             />
           </label>
           <div className="drawer-meta inline">
-            <span>{noteValue.length} chars</span>
-            <span>Autosaved locally</span>
-            <span>{Object.keys(notes).length} notes</span>
+            <span>{noteValue.length} caracteres</span>
+            <span>Autoguardado local</span>
+            <span>{Object.keys(notes).length} notas</span>
           </div>
         </div>
       )
     }
 
-    if (activePanel === 'Settings') {
+    if (activePanel === 'Ajustes') {
       return (
         <div className="drawer-content settings-list">
           <label className="settings-row">
             <span>
-              <strong>Organelle Labels</strong>
-              <small>Show the floating label on the stage.</small>
+              <strong>Etiquetas de orgánulos</strong>
+              <small>Muestra la etiqueta flotante sobre el escenario.</small>
             </span>
             <input type="checkbox" checked={labelVisible} onChange={(event) => onSetLabelVisible(event.target.checked)} />
           </label>
           <label className="settings-row">
             <span>
-              <strong>Cross-Section</strong>
-              <small>Keep the cutaway view enabled.</small>
+              <strong>Corte transversal</strong>
+              <small>Mantén activada la vista en corte.</small>
             </span>
             <input type="checkbox" checked={crossSection} onChange={(event) => onSetCrossSection(event.target.checked)} />
           </label>
           <div className="settings-row">
             <span>
-              <strong>Render Quality</strong>
-              <small>Balanced is faster; high uses denser DPR.</small>
+              <strong>Calidad de render</strong>
+              <small>Equilibrada es más rápida; alta usa mayor DPR.</small>
             </span>
             <div className="segmented">
-              {['balanced', 'high'].map((quality) => (
+              {[
+                { id: 'balanced', label: 'Equilibrada' },
+                { id: 'high', label: 'Alta' },
+              ].map((quality) => (
                 <button
-                  key={quality}
+                  key={quality.id}
                   type="button"
-                  className={settings.quality === quality ? 'active' : ''}
-                  onClick={() => onUpdateSettings({ ...settings, quality })}
+                  className={settings.quality === quality.id ? 'active' : ''}
+                  onClick={() => onUpdateSettings({ ...settings, quality: quality.id })}
                 >
-                  {quality}
+                  {quality.label}
                 </button>
               ))}
             </div>
           </div>
           <label className="settings-row">
             <span>
-              <strong>Compact UI</strong>
-              <small>Slightly tighter panels for smaller screens.</small>
+              <strong>Interfaz compacta</strong>
+              <small>Paneles algo más compactos para pantallas pequeñas.</small>
             </span>
             <input type="checkbox" checked={settings.compactUi} onChange={(event) => onUpdateSettings({ ...settings, compactUi: event.target.checked })} />
           </label>
@@ -3056,7 +2934,7 @@ function WorkspaceDrawer({
       )
     }
 
-    if (activePanel === 'Compare') {
+    if (activePanel === 'Comparar') {
       return (
         <div className="drawer-content">
           <div className="compare-drawer-grid">
@@ -3075,13 +2953,13 @@ function WorkspaceDrawer({
           <div className="cell-chip-grid">
             {allCells.filter((item) => item.id !== selectedCell).map((item) => (
               <button key={item.id} type="button" className={item.id === compareCell ? 'active' : ''} onClick={() => onSetCompareCell(item.id)}>
-                {item.name.replace(' Cell', '')}
+                {item.name}
               </button>
             ))}
           </div>
           <div className="drawer-actions">
-            <button type="button" className="drawer-primary" onClick={() => onSelectCell(compareCell)}>Open Compared Cell</button>
-            <button type="button" className="drawer-secondary" onClick={() => onSetCompareCell(profile.compareTarget)}>Reset Target</button>
+            <button type="button" className="drawer-primary" onClick={() => onSelectCell(compareCell)}>Abrir célula comparada</button>
+            <button type="button" className="drawer-secondary" onClick={() => onSetCompareCell(profile.compareTarget)}>Restablecer objetivo</button>
           </div>
         </div>
       )
@@ -3090,12 +2968,12 @@ function WorkspaceDrawer({
     return (
       <div className="drawer-content">
         <div className="profile-stats">
-          <span><strong>{allCells.length}</strong><small>cells</small></span>
-          <span><strong>{galleryItems.length}</strong><small>saved</small></span>
-          <span><strong>{Object.keys(notes).length}</strong><small>notes</small></span>
+          <span><strong>{allCells.length}</strong><small>células</small></span>
+          <span><strong>{galleryItems.length}</strong><small>guardadas</small></span>
+          <span><strong>{Object.keys(notes).length}</strong><small>notas</small></span>
         </div>
-        <p className="drawer-copy">Favorite: {savedFavorite}</p>
-        <p className="drawer-copy">Occurs: {profile.occurs}</p>
+        <p className="drawer-copy">Favorita: {savedFavorite}</p>
+        <p className="drawer-copy">Aparece en: {profile.occurs}</p>
       </div>
     )
   }
@@ -3107,14 +2985,14 @@ function WorkspaceDrawer({
           <strong>{activePanel}</strong>
           <span>{WORKSPACE_PANELS[activePanel]}</span>
         </div>
-        <button type="button" onClick={onClose} aria-label="Close panel">
+        <button type="button" onClick={onClose} aria-label="Cerrar panel">
           <X size={15} />
         </button>
       </header>
       <div className="drawer-meta">
         <span>{cell.name}</span>
         <span>{detail.title}</span>
-        <span>Cross-section ready</span>
+        <span>Corte transversal listo</span>
       </div>
       {renderContent()}
     </motion.section>
@@ -3138,7 +3016,7 @@ function App() {
   const [selectedOrganelle, setSelectedOrganelle] = useState(() => initialUiStateRef.current.selectedOrganelle)
   const [crossSection, setCrossSection] = useState(() => initialUiStateRef.current.crossSection)
   const [activePanel, setActivePanel] = useState(null)
-  const [toast, setToast] = useState('Plant cell ready')
+  const [toast, setToast] = useState('Célula vegetal lista')
   const [favoriteKey, setFavoriteKey] = useState(() => initialUiStateRef.current.favoriteKey)
   const [labelVisible, setLabelVisible] = useState(() => loadStoredValue('bio-demo-label-visible', true))
   const [selectedMicroscope, setSelectedMicroscope] = useState(() => initialUiStateRef.current.selectedMicroscope)
@@ -3191,7 +3069,7 @@ function App() {
     setSelectedCell('plant')
     setSelectedOrganelle(getDefaultOrganelle('plant'))
     setCompareCell(getCellProfile('plant').compareTarget)
-    setToast('Saved custom cell was missing; Plant Cell loaded')
+    setToast('Faltaba la célula personalizada guardada; se cargó la Célula vegetal')
   }, [allCells, selectedCell])
 
   useEffect(() => {
@@ -3206,7 +3084,7 @@ function App() {
     setSelectedOrganelle(getDefaultOrganelle(cellId))
     setCompareCell((current) => (current === cellId ? getCellProfile(cellId).compareTarget : current))
     if (nextCell.custom) setUploadedImage({ name: nextCell.name, url: nextCell.imageUrl || '' })
-    setToast(`${nextCell.name} loaded`)
+    setToast(`${nextCell.name} cargada`)
   }
 
   async function handleExport() {
@@ -3221,17 +3099,17 @@ function App() {
         crossSection,
         selectedMicroscope,
         exportedAt: new Date().toISOString(),
-        fallbackReason: 'WebGL model exporter is not available in this browser.',
+        fallbackReason: 'El exportador de modelos WebGL no está disponible en este navegador.',
       })
-      setToast('WebGL unavailable; metadata exported')
+      setToast('WebGL no disponible; metadatos exportados')
       return
     }
 
-    setToast('Preparing GLB export')
+    setToast('Preparando exportación GLB')
     try {
       const glb = await sceneExporter()
       downloadBlob(`${selectedCell}-${selectedOrganelle}.glb`, glb)
-      setToast(`${cell.name} GLB downloaded`)
+      setToast(`GLB de ${cell.name} descargado`)
     } catch (error) {
       console.error(error)
       downloadJson(`${selectedCell}-cell-export.json`, {
@@ -3241,9 +3119,9 @@ function App() {
         crossSection,
         selectedMicroscope,
         exportedAt: new Date().toISOString(),
-        fallbackReason: error instanceof Error ? error.message : 'GLB export failed.',
+        fallbackReason: error instanceof Error ? error.message : 'La exportación GLB falló.',
       })
-      setToast('GLB failed; metadata exported')
+      setToast('GLB falló; metadatos exportados')
     }
   }
 
@@ -3278,10 +3156,10 @@ function App() {
             status: 'local',
             modelUrl: '',
             rawModelUrl: '',
-            message: 'JS depth relief is ready.',
+            message: 'Relieve JS de profundidad listo.',
           },
         }))
-        setToast(`${customCell.name} JS depth visual ready`)
+        setToast(`Visual de relieve JS de ${customCell.name} listo`)
         return
       }
 
@@ -3294,10 +3172,10 @@ function App() {
             status: 'uploading',
             modelUrl: '',
             rawModelUrl: '',
-            message: `Sending image to ${label}.`,
+            message: `Enviando imagen a ${label}.`,
           },
         }))
-        setToast(`Creating ${label} image-to-3D task`)
+        setToast(`Creando tarea imagen-a-3D con ${label}`)
 
         const task = await create3dGeneration({
           provider,
@@ -3313,10 +3191,10 @@ function App() {
             requestedProvider,
             status: 'processing',
             taskId: task.taskId,
-            message: `${label} is generating the GLB model.`,
+            message: `${label} está generando el modelo GLB.`,
           },
         }))
-        setToast(`${label} task started: ${String(task.taskId).slice(0, 8)}`)
+        setToast(`Tarea ${label} iniciada: ${String(task.taskId).slice(0, 8)}`)
 
         const finalStatus = await waitFor3dModel(task.taskId, provider, (status) => {
           updateCustomCell(customCell.id, (cell) => ({
@@ -3326,7 +3204,7 @@ function App() {
               requestedProvider,
               status: status.status || 'processing',
               taskId: task.taskId,
-              message: status.progress ? `${label} progress ${status.progress}%` : `${label} status: ${status.status || 'processing'}`,
+              message: status.progress ? `${label} progreso ${status.progress}%` : `${label} estado: ${status.status || 'processing'}`,
             },
           }))
         })
@@ -3340,13 +3218,13 @@ function App() {
             taskId: task.taskId,
             modelUrl: finalStatus.modelUrl,
             rawModelUrl: finalStatus.rawModelUrl,
-            message: `${label} GLB loaded.`,
+            message: `GLB de ${label} cargado.`,
           },
         }))
-        setToast(`${customCell.name} ${label} 3D model ready`)
+        setToast(`Modelo 3D de ${customCell.name} (${label}) listo`)
         return
       } catch (error) {
-        const message = error instanceof Error ? error.message : `${label} generation failed.`
+        const message = error instanceof Error ? error.message : `La generación con ${label} falló.`
         errors.push(`${label}: ${message}`)
 
         if (provider !== providers[providers.length - 1]) {
@@ -3356,10 +3234,10 @@ function App() {
               provider,
               requestedProvider,
               status: 'processing',
-              message: `${label} failed; trying ${getProviderLabel(providers[providers.indexOf(provider) + 1])}.`,
+              message: `${label} falló; probando con ${getProviderLabel(providers[providers.indexOf(provider) + 1])}.`,
             },
           }))
-          setToast(`${label} failed; trying backup provider`)
+          setToast(`${label} falló; probando proveedor de respaldo`)
         }
       }
     }
@@ -3370,13 +3248,13 @@ function App() {
   async function handleRetryGeneration(cellId) {
     const cell = getCustomCell(cellId, customCells)
     if (!cell?.imageUrl) {
-      setToast('No source image to retry')
+      setToast('No hay imagen de origen para reintentar')
       return
     }
 
     setSelectedCell(cell.id)
     setSelectedOrganelle(getDefaultOrganelle(cell.id))
-    setToast('Retrying 3D generation')
+    setToast('Reintentando generación 3D')
 
     try {
       const retryMode = settings.generationMode === 'local' ? 'cinematic' : settings.generationMode
@@ -3390,10 +3268,10 @@ function App() {
           status: 'failed',
           modelUrl: '',
           rawModelUrl: '',
-          message: error instanceof Error ? error.message : '3D generation failed.',
+          message: error instanceof Error ? error.message : 'La generación 3D falló.',
         },
       }))
-      setToast(error instanceof Error ? error.message : 'Image-to-3D generation failed')
+      setToast(error instanceof Error ? error.message : 'La generación imagen-a-3D falló')
     }
   }
 
@@ -3403,23 +3281,23 @@ function App() {
       return
     }
 
-    setToast('Uploading image for 3D generation')
+    setToast('Subiendo imagen para generación 3D')
     let customCell = null
     try {
       const requestedMode = settings.generationMode === 'local' ? 'cinematic' : settings.generationMode
-      if (settings.generationMode === 'local') setToast('Local GLB mode needs a model file; using JS Depth')
+      if (settings.generationMode === 'local') setToast('El modo GLB local necesita un archivo de modelo; usando Relieve JS')
       const { displayUrl, generationUrl } = await prepareImageForUpload(file)
       customCell = createCustomCell(file.name, displayUrl, {
         provider: requestedMode,
         requestedProvider: requestedMode,
-        type: requestedMode === 'cinematic' ? `JS Depth ${getCell(inferCellTemplate(file.name)).name}` : undefined,
+        type: requestedMode === 'cinematic' ? `Relieve JS de ${getCell(inferCellTemplate(file.name)).name}` : undefined,
       })
       customCell.generation = {
         ...customCell.generation,
         provider: requestedMode,
         requestedProvider: requestedMode,
         status: 'uploading',
-        message: requestedMode === 'cinematic' ? 'Building browser-side JS depth relief.' : 'Sending image to backend.',
+        message: requestedMode === 'cinematic' ? 'Generando relieve JS en el navegador.' : 'Enviando imagen al backend.',
       }
       const nextCustomCells = [customCell, ...customCells].slice(0, 8)
 
@@ -3429,7 +3307,7 @@ function App() {
       setSelectedCell(customCell.id)
       setSelectedOrganelle(getDefaultOrganelle(customCell.id))
       setCompareCell(customCell.template)
-      setActivePanel('Library')
+      setActivePanel('Biblioteca')
       await generateCustomCellModel(customCell, generationUrl, file.name, requestedMode)
     } catch (error) {
       console.error(error)
@@ -3439,25 +3317,25 @@ function App() {
             ...cell.generation,
             requestedProvider: settings.generationMode,
             status: 'failed',
-            message: error instanceof Error ? error.message : '3D generation failed.',
+            message: error instanceof Error ? error.message : 'La generación 3D falló.',
           },
         }))
       }
-      setToast(error instanceof Error ? error.message : 'Image-to-3D generation failed')
+      setToast(error instanceof Error ? error.message : 'La generación imagen-a-3D falló')
     }
   }
 
   async function handleUploadLocalModel(file) {
-    setToast('Importing local 3D model')
+    setToast('Importando modelo 3D local')
     let customCell = null
 
     try {
       customCell = createCustomCell(file.name, '', {
         provider: 'local',
         requestedProvider: 'local',
-        type: 'Local 3D Model',
+        type: 'Modelo 3D local',
         status: 'uploading',
-        message: 'Saving model to local cache.',
+        message: 'Guardando modelo en la caché local.',
       })
       const nextCustomCells = [customCell, ...customCells].slice(0, 8)
 
@@ -3467,7 +3345,7 @@ function App() {
       setSelectedCell(customCell.id)
       setSelectedOrganelle(getDefaultOrganelle(customCell.id))
       setCompareCell(customCell.template)
-      setActivePanel('Library')
+      setActivePanel('Biblioteca')
 
       const localModel = await uploadLocal3dModel(file)
       updateCustomCell(customCell.id, (cell) => ({
@@ -3479,10 +3357,10 @@ function App() {
           taskId: localModel.taskId,
           modelUrl: localModel.modelUrl,
           rawModelUrl: '',
-          message: 'Local GLB loaded from disk cache.',
+          message: 'GLB local cargado desde la caché de disco.',
         },
       }))
-      setToast(`${customCell.name} local 3D model ready`)
+      setToast(`Modelo 3D local de ${customCell.name} listo`)
     } catch (error) {
       console.error(error)
       if (customCell) {
@@ -3492,11 +3370,11 @@ function App() {
             provider: 'local',
             requestedProvider: 'local',
             status: 'failed',
-            message: error instanceof Error ? error.message : 'Local model import failed.',
+            message: error instanceof Error ? error.message : 'La importación del modelo local falló.',
           },
         }))
       }
-      setToast(error instanceof Error ? error.message : 'Local model import failed')
+      setToast(error instanceof Error ? error.message : 'La importación del modelo local falló')
     }
   }
 
@@ -3509,12 +3387,12 @@ function App() {
       createdAt: new Date().toISOString(),
     }
     setGalleryItems((items) => [item, ...items].slice(0, 12))
-    setToast('View saved to Gallery')
+    setToast('Vista guardada en la Galería')
   }
 
   function handleClearGallery() {
     setGalleryItems([])
-    setToast('Gallery cleared')
+    setToast('Galería vaciada')
   }
 
   function handleUpdateNote(noteKey, value) {
@@ -3528,8 +3406,8 @@ function App() {
 
   function handleOpenCompare(cellId) {
     setCompareCell(cellId)
-    setActivePanel('Compare')
-    setToast(`${getCell(selectedCell, customCells).name} compared with ${getCell(cellId, customCells).name}`)
+    setActivePanel('Comparar')
+    setToast(`${getCell(selectedCell, customCells).name} comparada con ${getCell(cellId, customCells).name}`)
   }
 
   return (
@@ -3555,7 +3433,7 @@ function App() {
           onSelectOrganelle={setSelectedOrganelle}
           onSetCompareCell={(cellId) => {
             setCompareCell(cellId)
-            setToast(`${getCell(cellId).name} set as comparison target`)
+            setToast(`${getCell(cellId).name} definida como objetivo de comparación`)
           }}
           onSaveGallery={handleSaveGallery}
           onClearGallery={handleClearGallery}
