@@ -24,7 +24,7 @@ import {
   X,
 } from 'lucide-react'
 import * as THREE from 'three'
-import plantCellRender from './assets/cell-plant-render.png'
+import plantCellRender from './assets/cell-plant-render.webp'
 import './App.css'
 
 const CELL_TYPES = [
