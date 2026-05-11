@@ -24,7 +24,7 @@ import {
   X,
 } from 'lucide-react'
 import * as THREE from 'three'
-import plantCellRender from './assets/cell-plant-render.png'
+import plantCellRender from './assets/cell-plant-render.webp'
 import './App.css'
 
 const CELL_TYPES = [
@@ -1400,7 +1400,7 @@ function CellScene({ selectedCell, modelCellId, referenceImageUrl, generatedMode
       camera={{ position: [0, 0.1, 5.25], fov: 35 }}
       shadows
       dpr={dpr}
-      gl={{ antialias: true, alpha: true, preserveDrawingBuffer: true }}
+      gl={{ antialias: true, alpha: true, preserveDrawingBuffer: true, powerPreference: 'high-performance' }}
       onCreated={({ gl }) => {
         gl.toneMapping = THREE.ACESFilmicToneMapping
         gl.toneMappingExposure = 1.08
