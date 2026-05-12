@@ -2294,7 +2294,7 @@ function ViewerControls({ crossSection, setCrossSection, viewMode, setViewMode }
   )
 }
 
-function CenterStage({ selectedCell, selectedOrganelle, setSelectedOrganelle, crossSection, setCrossSection, labelVisible, renderQuality, customCells, onNotify, onExport, onExporterReady, onRetryGeneration }) {
+function CenterStage({ selectedCell, selectedOrganelle, setSelectedOrganelle, crossSection, setCrossSection, labelVisible, renderQuality, selectedMicroscope, customCells, onNotify, onExport, onExporterReady, onRetryGeneration }) {
   const [viewMode, setViewMode] = useState('layers')
   const [autoRotate, setAutoRotate] = useState(false)
   const [isIsolated, setIsIsolated] = useState(false)
@@ -2323,6 +2323,8 @@ function CenterStage({ selectedCell, selectedOrganelle, setSelectedOrganelle, cr
     : generatedModelUrl
     ? `Imagen de origen usada para la generación 3D con ${generationProviderLabel}`
     : `Imagen de origen para la generación con ${generationProviderLabel}`
+  const microscopeTone = MICROSCOPE_IMAGES.find((item) => item.label === selectedMicroscope)?.tone ?? 'light'
+  const microscopeClass = microscopeTone === 'light' ? '' : `microscope-${microscopeTone}`
   const viewerResetKey = `${selectedCell}-${generatedModelUrl}-${generation?.provider || 'built-in'}-${resetNonce}`
   const activeViewerError = viewerError?.key === viewerResetKey ? viewerError.message : ''
   const viewerFallback = (
@@ -2405,7 +2407,7 @@ function CenterStage({ selectedCell, selectedOrganelle, setSelectedOrganelle, cr
         </div>
       </div>
       <ViewerControls crossSection={crossSection} setCrossSection={setCrossSection} viewMode={viewMode} setViewMode={setViewMode} />
-      <div className={`cell-viewer ${viewMode} ${isIsolated ? 'is-isolated' : ''} ${isCinematicCell ? 'cinematic-viewer' : ''}`}>
+      <div className={`cell-viewer ${viewMode} ${isIsolated ? 'is-isolated' : ''} ${isCinematicCell ? 'cinematic-viewer' : ''} ${microscopeClass}`.replace(/\s+/g, ' ').trim()}>
         <ViewerErrorBoundary resetKey={viewerResetKey} onError={handleViewerError} fallback={viewerFallback}>
           {isCinematicCell ? (
             <CinematicLayerVisual imageUrl={referenceImageUrl} selectedOrganelle={selectedOrganelle} onSelectOrganelle={setSelectedOrganelle} autoRotate={autoRotate || proofMode} />
@@ -3349,6 +3351,7 @@ function App() {
             setCrossSection={setCrossSection}
             labelVisible={labelVisible}
             renderQuality={settings.quality}
+            selectedMicroscope={selectedMicroscope}
             customCells={customCells}
             onNotify={setToast}
             onExport={handleExport}
