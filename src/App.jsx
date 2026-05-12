@@ -13,7 +13,6 @@ import {
   Eye,
   Grid3X3,
   Heart,
-  Image,
   Layers3,
   Library,
   Move3D,
@@ -107,7 +106,6 @@ const WORKSPACE_PANELS = {
   Biblioteca: 'Estructuras de referencia para paredes, membranas, núcleos, lisosomas y mitocondrias.',
   Cuadernos: 'Notas de observación vinculadas a la célula y al orgánulo seleccionados.',
   Ajustes: 'Calidad del visor, etiquetas, cortes por defecto y preferencias de exportación.',
-  Comparar: 'Comparación de células lado a lado para ver estructura visual y función biológica.',
   Perfil: 'Espacio actual: Prototipo de visualización biológica.',
 }
 
@@ -2604,12 +2602,7 @@ function DetailPanel({ selectedCell, selectedOrganelle, favoriteKey, setFavorite
   )
 }
 
-function BottomDeck({ selectedCell, selectedMicroscope, setSelectedMicroscope, uploadedImage, generationMode, onGenerationModeChange, compareCell, onUploadImage, onCompare, onNotify }) {
-  const fileInputRef = useRef(null)
-  const selected = getCell(selectedCell)
-  const compareTarget = getCell(compareCell)
-  const uploadAccept = generationMode === 'local' ? '.glb,.gltf,model/gltf-binary,model/gltf+json' : 'image/*,.glb,.gltf,model/gltf-binary,model/gltf+json'
-
+function BottomDeck({ selectedMicroscope, setSelectedMicroscope, onNotify }) {
   function handleMicroscopeSelect(item) {
     setSelectedMicroscope(item.label)
     onNotify(item.note)
@@ -2622,25 +2615,6 @@ function BottomDeck({ selectedCell, selectedMicroscope, setSelectedMicroscope, u
           <span>Vista al microscopio</span>
           <small>3</small>
         </header>
-        <div className="generation-mode-row">
-          <span>Modo de generación</span>
-          <div className="generation-mode-pills">
-            {GENERATION_MODE_OPTIONS.map((mode) => (
-              <button
-                key={mode.id}
-                type="button"
-                className={generationMode === mode.id ? 'active' : ''}
-                onClick={() => {
-                  onGenerationModeChange(mode.id)
-                  onNotify(`Modo ${mode.label} seleccionado`)
-                }}
-                title={mode.description}
-              >
-                {mode.label}
-              </button>
-            ))}
-          </div>
-        </div>
         <div className="micro-grid">
           {MICROSCOPE_IMAGES.map((item) => (
             <button
@@ -2653,48 +2627,7 @@ function BottomDeck({ selectedCell, selectedMicroscope, setSelectedMicroscope, u
               <small>{item.label}</small>
             </button>
           ))}
-          <button
-            type="button"
-            className={uploadedImage ? `add-image active ${uploadedImage.url ? 'with-preview' : 'with-model'}` : 'add-image'}
-            style={uploadedImage?.url ? { '--upload-preview': `url(${uploadedImage.url})` } : undefined}
-            onClick={() => fileInputRef.current?.click()}
-          >
-            {uploadedImage?.url ? <Image size={16} /> : <Box size={16} />}
-            {uploadedImage?.name || 'Añadir imagen / GLB'}
-          </button>
-          <input
-            ref={fileInputRef}
-            className="hidden-file-input"
-            type="file"
-            accept={uploadAccept}
-            onChange={(event) => {
-              const file = event.target.files?.[0]
-              if (!file) return
-              onUploadImage(file)
-              event.target.value = ''
-            }}
-          />
         </div>
-      </div>
-
-      <div className="panel compare-panel">
-        <header className="panel-title">
-          <span>Comparar células</span>
-          <small>2</small>
-        </header>
-        <button type="button" className="compare-box" onClick={() => onCompare(compareTarget.id)}>
-          <CellThumb cell={selected} selected />
-          <div>
-            <strong>{selected.name}</strong>
-            <small>{selected.type}</small>
-          </div>
-          <span className="versus">VS</span>
-          <CellThumb cell={compareTarget} />
-          <div>
-            <strong>{compareTarget.name}</strong>
-            <small>{compareTarget.type}</small>
-          </div>
-        </button>
       </div>
     </section>
   )
@@ -2748,7 +2681,6 @@ function WorkspaceDrawer({
   activePanel,
   selectedCell,
   selectedOrganelle,
-  compareCell,
   allCells = CELL_TYPES,
   galleryItems,
   notes,
@@ -2761,7 +2693,6 @@ function WorkspaceDrawer({
   onClose,
   onSelectCell,
   onSelectOrganelle,
-  onSetCompareCell,
   onSaveGallery,
   onClearGallery,
   onUpdateNote,
@@ -2774,7 +2705,6 @@ function WorkspaceDrawer({
   if (!activePanel) return null
 
   const cell = getCell(selectedCell)
-  const compare = getCell(compareCell)
   const detail = getOrganelleDetail(selectedCell, selectedOrganelle)
   const profile = getCellProfile(selectedCell)
   const noteKey = `${selectedCell}:${selectedOrganelle}`
@@ -2930,37 +2860,6 @@ function WorkspaceDrawer({
             </span>
             <input type="checkbox" checked={settings.compactUi} onChange={(event) => onUpdateSettings({ ...settings, compactUi: event.target.checked })} />
           </label>
-        </div>
-      )
-    }
-
-    if (activePanel === 'Comparar') {
-      return (
-        <div className="drawer-content">
-          <div className="compare-drawer-grid">
-            {[cell, compare].map((item) => {
-              const itemProfile = getCellProfile(item.id)
-              return (
-                <div key={item.id} className="compare-card">
-                  <CellThumb cell={item} selected={item.id === selectedCell} />
-                  <strong>{item.name}</strong>
-                  <small>{itemProfile.summary}</small>
-                </div>
-              )
-            })}
-          </div>
-          <p className="drawer-copy">{profile.comparison}</p>
-          <div className="cell-chip-grid">
-            {allCells.filter((item) => item.id !== selectedCell).map((item) => (
-              <button key={item.id} type="button" className={item.id === compareCell ? 'active' : ''} onClick={() => onSetCompareCell(item.id)}>
-                {item.name}
-              </button>
-            ))}
-          </div>
-          <div className="drawer-actions">
-            <button type="button" className="drawer-primary" onClick={() => onSelectCell(compareCell)}>Abrir célula comparada</button>
-            <button type="button" className="drawer-secondary" onClick={() => onSetCompareCell(profile.compareTarget)}>Restablecer objetivo</button>
-          </div>
         </div>
       )
     }
@@ -3404,12 +3303,6 @@ function App() {
     })
   }
 
-  function handleOpenCompare(cellId) {
-    setCompareCell(cellId)
-    setActivePanel('Comparar')
-    setToast(`${getCell(selectedCell, customCells).name} comparada con ${getCell(cellId, customCells).name}`)
-  }
-
   return (
     <main className={settings.compactUi ? 'studio-shell compact-ui' : 'studio-shell'}>
       <motion.div className="studio-window" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.38 }}>
@@ -3418,7 +3311,6 @@ function App() {
           activePanel={activePanel}
           selectedCell={selectedCell}
           selectedOrganelle={selectedOrganelle}
-          compareCell={compareCell}
           allCells={allCells}
           galleryItems={galleryItems}
           notes={notes}
@@ -3431,10 +3323,6 @@ function App() {
           onClose={() => setActivePanel(null)}
           onSelectCell={handleSelectCell}
           onSelectOrganelle={setSelectedOrganelle}
-          onSetCompareCell={(cellId) => {
-            setCompareCell(cellId)
-            setToast(`${getCell(cellId).name} definida como objetivo de comparación`)
-          }}
           onSaveGallery={handleSaveGallery}
           onClearGallery={handleClearGallery}
           onUpdateNote={handleUpdateNote}
@@ -3477,15 +3365,8 @@ function App() {
             onNotify={setToast}
           />
           <BottomDeck
-            selectedCell={selectedCell}
             selectedMicroscope={selectedMicroscope}
             setSelectedMicroscope={setSelectedMicroscope}
-            uploadedImage={uploadedImage}
-            generationMode={settings.generationMode}
-            onGenerationModeChange={(generationMode) => setSettings((current) => ({ ...current, generationMode }))}
-            onUploadImage={handleUploadImage}
-            compareCell={compareCell}
-            onCompare={handleOpenCompare}
             onNotify={setToast}
           />
         </div>
